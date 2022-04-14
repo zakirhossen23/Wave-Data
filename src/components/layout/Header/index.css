@@ -1,0 +1,26 @@
+.nav{
+  background-color:#2196f3
+}
+.position-fixed{
+  position: absolute;
+  margin: 0 2vw;
+}
+.main-nav {
+    width: 98%;
+  }
+  .main-nav ul {
+    align-items: center;
+    display: flex;
+  }
+  .main-nav ul li {
+    margin-right: 20px;
+  }
+  .main-nav ul li a {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.25px;
+    opacity: 0.48;
+  }
+
+  
