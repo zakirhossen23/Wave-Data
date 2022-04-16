@@ -10,6 +10,7 @@ import Work from './pages/work';
 import Privacy from './pages/privacy'
 import FAQ from './pages/faq'
 import About from './pages/about'
+import Contact from './pages/contact'
 
 
 function App() {
@@ -31,8 +32,11 @@ function App() {
             <Route exact path="/faq">
               <FAQ />
             </Route>
-              <Route exact path="/about">
+            <Route exact path="/about">
               <About />
+            </Route>
+                <Route exact path="/contact">
+              <Contact />
             </Route>
           </Switch>
           <Footer />

@@ -5,7 +5,7 @@ import { Navbar, NavItem } from 'react-materialize';
 
 export default function Footer() {
     return (
-        <footer className="footer" style={{ paddingTop: 64 }}>
+        <footer className="footer" style={{ background: 'white', paddingTop: 64 }}>
         <div className="container container--large" style={{ boxSizing: "border-box",display: "flex",flexDirection: "column",flexGrow: 1,maxWidth: 1200,margin: "0 auto",padding: 0,width: "100%"}}>
           <div className="footer__wrapper" style={{flexDirection: "row",margin: "0 0 40px",display: "flex",flexWrap: "nowrap"}}>
             <div className="footer__left" style={{alignItems: "center",flexDirection: "row",justifyContent: "space-between",width: "14%"}}>

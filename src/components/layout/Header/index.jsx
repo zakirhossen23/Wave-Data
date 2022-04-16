@@ -10,7 +10,7 @@ export default function Header() {
             <nav className='nav'>
                 <div className="nav-wrapper main-nav">
 
-                    <ul id="nav-mobile" className="position-fixed med-and-down">
+                    <ul id="nav-mobile" className="left med-and-down">
                         <a href='/' style={{ height: 64, width: 68, padding: 0 }}>
                             <img src="/favicon.ico" style={{ height: "100%", width: "100%", aspectRatio: 4 }} />
                         </a>
