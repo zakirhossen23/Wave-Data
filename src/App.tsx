@@ -8,6 +8,7 @@ import Footer from './components/layout/Footer'
 import Header from './components/layout/Header';
 import Work from './pages/work';
 import Privacy from './pages/privacy'
+import FAQ from './pages/faq'
 
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
             </Route>
             <Route exact path="/privacy">
               <Privacy />
+            </Route>
+            <Route exact path="/faq">
+              <FAQ />
             </Route>
           </Switch>
           <Footer />
