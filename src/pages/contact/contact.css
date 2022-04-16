@@ -456,7 +456,7 @@
     margin-right: auto;
     margin-left: auto; }
   
-  .row {
+  .contact-row {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -8115,14 +8115,6 @@
     .table .thead-dark th {
       color: inherit;
       border-color: #dee2e6; } }
-  
-  body {
-    font-family: "Poppins", Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.8;
-    font-weight: normal;
-    background: #fafafa;
-    color: #666666; }
   
   a {
     -webkit-transition: .3s all ease;

@@ -29,14 +29,14 @@ export default function Home() {
                     <div style={{ marginBottom: 12 }}>
                         <div style={{ display: "flex", gap: "12%", justifyContent: "center" }}>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                <h1 style={{ fontSize: 26, margin: 0 }}>I am a</h1>
+                                <h1 style={{color:'white', fontSize: 26, margin: 0 }}>I am a</h1>
                                 <select name="dropdown" style={{ display: "block", width: 187, marginLeft: 16, height: "2.5rem" }}>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
                             </div>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                <h1 style={{ fontSize: 26, margin: 0 }}>I am</h1>
+                                <h1 style={{ color:'white',fontSize: 26, margin: 0 }}>I am</h1>
                                 <select name="dropdown" style={{ display: "block", width: 187, marginLeft: 16, height: "2.5rem" }}>
                                     <option value={18}>18 years</option>
                                     <option value={19}>19 years</option>
@@ -110,7 +110,7 @@ export default function Home() {
                                 </select>
                             </div>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                <h1 style={{ fontSize: 26, margin: 0 }}>I live in</h1>
+                                <h1 style={{ color:'white', fontSize: 26, margin: 0 }}>I live in</h1>
                                 <select name="dropdown" style={{ display: "block", width: 187, marginLeft: 16, height: "2.5rem" }}>
                                     <option>select country</option>
                                     <option value="AF">Afghanistan</option>

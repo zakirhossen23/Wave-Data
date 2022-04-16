@@ -49,15 +49,15 @@ export default function Contact() {
 
     return (
         <>
-            <div className="row"  style={{margin: '0'}}>
+            <div className="contact-row"  style={{margin: '0'}}>
                 <Col>
                     <section class="ftco-section">
                         <div class="container">
 
-                            <div class="row justify-content-center">
+                            <div class="contact-row justify-content-center">
                                 <div class="col-md-10">
                                     <div class="wrapper">
-                                        <div class="row no-gutters">
+                                        <div class="contact-row no-gutters">
                                             <div class="col-md-6">
                                                 <div class="contact-wrap w-100 p-lg-5 p-4">
                                                     <h3 class="mb-4">Send us a message</h3>
@@ -68,7 +68,7 @@ export default function Contact() {
                                                         Your message was sent, thank you!
                                                     </div>
                                                     <div id="contactForm" name="contactForm" class="contactForm">
-                                                        <div class="row">
+                                                        <div class="contact-row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <input type="text" class="form-control" name="name" id="name" placeholder="Name" />
