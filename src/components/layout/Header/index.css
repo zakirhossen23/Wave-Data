@@ -1,5 +1,6 @@
+
 .nav{
-  background-color:#2196f3
+  background-color:#ffffff
 }
 .position-fixed{
   position: absolute;
@@ -16,9 +17,9 @@
     margin-right: 20px;
   }
   .main-nav ul li a {
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 500;
+    color: blue;
+    font-size: 17px;
+    font-weight: 800;
     letter-spacing: 0.25px;
     opacity: 0.48;
   }
