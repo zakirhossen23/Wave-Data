@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
 import './faq.css'
-export default function Policy() {
+export default function FAQ() {
 
     window.onload = function () {
         const faqTag = document.querySelectorAll('.faq');

@@ -9,6 +9,7 @@ import Header from './components/layout/Header';
 import Work from './pages/work';
 import Privacy from './pages/privacy'
 import FAQ from './pages/faq'
+import About from './pages/about'
 
 
 function App() {
@@ -29,6 +30,9 @@ function App() {
             </Route>
             <Route exact path="/faq">
               <FAQ />
+            </Route>
+              <Route exact path="/about">
+              <About />
             </Route>
           </Switch>
           <Footer />
