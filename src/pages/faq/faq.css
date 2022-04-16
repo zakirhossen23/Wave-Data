@@ -17,6 +17,7 @@ h2{
     border: 1px solid rgba(0 0 0 / .1);
     border-radius: 5px;
     color: #979797;
+    display: flex;
     position: relative;
     line-height: 1.5em;
     margin-top: 15px;
@@ -26,11 +27,11 @@ h2{
     width: 90%;
 }
 
-.btn{
+.faq-btn{
+    height: 41px;
     color: #ffffff;
     position: absolute;
     right: 25px;
-    top: 35px;
     font-weight: 600;
     font-size: 1.25em;
     cursor: pointer;

@@ -40,7 +40,7 @@ export default function FAQ() {
                                 You will be paid by PayPal.
                             </p>
                         </div>
-                        <span className="btn">+</span>
+                        <span className="faq-btn btn">+</span>
                     </div>
                     {/* FAQ 1 End */}
                     <div className="faq ">
@@ -51,7 +51,7 @@ export default function FAQ() {
                                 You can share your details
                             </p>
                         </div>
-                        <span className="btn">+</span>
+                        <span className="faq-btn btn">+</span>
                     </div>
                     {/* FAQ 2 End */}
                     <div className="faq">
@@ -62,7 +62,7 @@ export default function FAQ() {
                                 You have to download an app. And finish all the task.
                             </p>
                         </div>
-                        <span className="btn">+</span>
+                        <span className="faq-btn btn">+</span>
                     </div>
                     {/* FAQ 3 End */}
                 </div>
