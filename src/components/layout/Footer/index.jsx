@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import { Navbar, NavItem } from 'react-materialize';
 
-export default function Header() {
+export default function Footer() {
     return (
         <footer className="footer" style={{ paddingTop: 64 }}>
         <div className="container container--large" style={{ boxSizing: "border-box",display: "flex",flexDirection: "column",flexGrow: 1,maxWidth: 1200,margin: "0 auto",padding: 0,width: "100%"}}>
@@ -20,22 +20,22 @@ export default function Header() {
                 </div>
                 <ul className="footer-nav__list" style={{border: "0 none",margin: 0,padding: 0,display: "flex",flexDirection: "column",alignContent: "flex-start",alignItems: "flex-start"}}>
                   <li>
-                    <a href="/swap">How does it work?</a>
+                    <a href="/work">How does it work?</a>
                   </li>
                   <li>
-                    <a href="/tokens">Privacy</a>
+                    <a href="/privacy">Privacy</a>
                   </li>
                   <li>
-                    <a href="/pairs">FAQ</a>
+                    <a href="/faq">FAQ</a>
                   </li>
                   <li>
-                    <a href="/donation">Sotries of users</a>
+                    <a href="/stories">Sotries of users</a>
                   </li>
                   <li>
-                    <a href="/CreateEvents">About us!</a>
+                    <a href="/about">About us!</a>
                   </li>
                   <li>
-                    <a href="/CreateEvents">Contact</a>
+                    <a href="/contact">Contact</a>
                   </li>
                 </ul>
               </div>

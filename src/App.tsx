@@ -1,14 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
+import { Route, BrowserRouter as Router, Switch, } from 'react-router-dom'
+
 import './App.css';
 import Home from './pages/Home';
 import Footer from './components/layout/Footer'
 import Header from './components/layout/Header';
-import {
-  Route,
-  BrowserRouter as Router,
-  Switch,
-} from 'react-router-dom'
+import Work from './pages/work';
+import Privacy from './pages/privacy'
+
 
 function App() {
   return (
@@ -20,7 +20,12 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
-
+            <Route exact path="/work">
+              <Work />
+            </Route>
+            <Route exact path="/privacy">
+              <Privacy />
+            </Route>
           </Switch>
           <Footer />
         </main>
