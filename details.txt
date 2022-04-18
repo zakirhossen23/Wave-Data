@@ -10,10 +10,19 @@ wavedata2022
 April14202233 -- Login
 
 
-Wave-Data
+WaveData
 wave12345
+user:wavedata
+Secret = tbhiovuba0gtb76rka3qc9239allnf0g
+Token = h6t28nnpr3e58pdm1c1miiei4kdcejuv
 ---------
 
 FHIR:
 wavedata2022@outlook.com
 April14202233%
+
+FHIR api key:
+2U3PyDoHn64h0XIeALym95ypZYzCWkud5qEdOBKF
+
+TigerGraph Database cloud:
+https://wavedata.i.tgcloud.io/api/restpp/query/WaveData/{queries}

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import Header from '../../components/layout/Header'
 export default function Work() {
     return (
         <>
+        <Header/>
             <div className="mb-5">
                 <div className="row" style={{ padding: "0 9%", textAlign: "justify", display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <h1 style={{ fontSize: 30, margin: "4rem", fontWeight: 700 }}>

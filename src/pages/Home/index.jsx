@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
-import './home.css'
+import React from 'react';
+import {  ArrowRightIcon, UserIcon, CurrencyDollarIcon, GlobeAltIcon } from "@heroicons/react/solid";
+import { DUMMY_TRIALS_DATA } from "../data";
+import Header from '../../components/layout/Header'
+import { useNavigate } from "react-router-dom";
 export default function Home() {
+    const navigate = useNavigate();
     return (
         <>
+            <Header />
             <div className="mb-5">
-                <div className="row">
-                    <img src="/samenhelpen.jpg" style={{ width: "100%", marginTop: 1 }} />
-                </div>
-                <div className="row">
+              
+                <div className="flex flex-col pb-20 pt-20 items-center" >
                     <h1 style={{ fontSize: 30, margin: 0, fontWeight: 700 }}>
                         By sharing your Data you can help finding a cure and be a part of of the
                         solution!
@@ -19,24 +20,24 @@ export default function Home() {
                             You at all times keep control of your data and decide who can see it and
                             use it for research.
                         </h1>
-                        <a style={{ fontSize: 21, margin: 0, marginLeft: 6, fontWeight: 500 }} href="/faq">
+                        <a className='text-xl ml-1 text-indigo-700 font-medium' href="/faq">
                             Read more...
                         </a>
                     </div>
                 </div>
 
-                <div className="row" style={{ background: 'rgb(73, 82, 163)', color: 'white', gap: '5px', display: 'flex', padding: '25px', flexDirection: 'column' }}>
+                <div className="bg-indigo-800 text-black gap-2 flex p-6 flex-col" >
                     <div style={{ marginBottom: 12 }}>
                         <div style={{ display: "flex", gap: "12%", justifyContent: "center" }}>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                <h1 style={{color:'white', fontSize: 26, margin: 0 }}>I am a</h1>
+                                <h1 style={{ color: 'white', fontSize: 26, margin: 0 }}>I am a</h1>
                                 <select name="dropdown" style={{ display: "block", width: 187, marginLeft: 16, height: "2.5rem" }}>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
                             </div>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                <h1 style={{ color:'white',fontSize: 26, margin: 0 }}>I am</h1>
+                                <h1 style={{ color: 'white', fontSize: 26, margin: 0 }}>I am</h1>
                                 <select name="dropdown" style={{ display: "block", width: 187, marginLeft: 16, height: "2.5rem" }}>
                                     <option value={18}>18 years</option>
                                     <option value={19}>19 years</option>
@@ -110,7 +111,7 @@ export default function Home() {
                                 </select>
                             </div>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                <h1 style={{ color:'white', fontSize: 26, margin: 0 }}>I live in</h1>
+                                <h1 style={{ color: 'white', fontSize: 26, margin: 0 }}>I live in</h1>
                                 <select name="dropdown" style={{ display: "block", width: 187, marginLeft: 16, height: "2.5rem" }}>
                                     <option>select country</option>
                                     <option value="AF">Afghanistan</option>
@@ -372,57 +373,42 @@ export default function Home() {
                         </div>
 
                     </div>
-                    <div>
+                    <div className='flex justify-center'>
                         <h1 style={{ fontSize: 39, margin: 0, color: "yellow", fontFamily: '"Charm", cursive' }}>
                             I can help to solve:
                         </h1>
                     </div>
-                    <div style={{ height: 280, background: "white", marginTop: 30, overflow: "hidden", borderRadius: 10 }}>
-                        <div style={{ height: "100%" }}>
-                            <div style={{ height: "80%", display: "flex", flexDirection: "row" }}>
-                                <div style={{ width: "20%", padding: "2%" }}>
-                                    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        <img src="/favicon.ico" style={{ borderRadius: 6, height: "100%", background: "yellow", width: "fit-content" }} />
+                    {DUMMY_TRIALS_DATA.map(({ id, title, image, description, contributors, audience, budget }, index) => {
+                        const IS_LAST = index + 1 === DUMMY_TRIALS_DATA.length;
+                        return (
+                            <div className={`bg-white border border-gray-400 rounded-lg overflow-hidden ${!IS_LAST && 'mb-2'}`}>
+                                <div className="flex p-6">
+                                    <img src={image} alt="Trial" className="w-[128px] h-[128px] object-cover" />
+                                    <div className="mx-8 flex-1">
+                                        <p className="text-3xl font-semibold">{title}</p>
+                                        <p className="mt-6">{`${description.slice(0, 180)}...`}</p>
                                     </div>
+                                    <button onClick={() => navigate(`/downloadapp`)} className="flex w-[52px] h-10 border border-gray-400 bg-gray-200 rounded-md justify-center items-center">
+                                        <ArrowRightIcon className="w-5 h-5 text-gray-400" />
+                                    </button>
                                 </div>
-                                <div style={{ display: 'flex', width: "80%", color: "black", padding: "2%", fontFamily: '"Plus Jakarta Sans", sans-serif' }}>
-                                    <div>
-                                        <div style={{ width: "88%", height: "30%", display: "flex" }}>
-                                            <h1 style={{ fontSize: "3rem", margin: 0, fontWeight: 600 }}>Trial 1</h1>
-                                        </div>
-
-                                        <div style={{ width: "88%", height: "80%", overflow: "hidden", fontSize: "1.2rem", textAlign: "justify", display: "flex" }}>
-                                            <span style={{ height: "100%" }}>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                            </span>
-                                        </div>
+                                <div className="flex p-6 border-t border-t-gray-400 bg-gray-200">
+                                    <div className="flex items-center">
+                                        <UserIcon className="w-5 h-5 text-gray-500" />
+                                        <p className="text-gray-500 font-semibold ml-1">{`${contributors} contributor(s)`}</p>
                                     </div>
-                                    <div>
-                                        <a href="#" className="linkArrow" />
+                                    <div className="flex items-center ml-6">
+                                        <GlobeAltIcon className="w-5 h-5 text-gray-500" />
+                                        <p className="text-gray-500 font-semibold ml-1">{`${contributors} contributor(s)`}</p>
                                     </div>
-                                </div>
-
-                            </div>
-
-                            <div style={{ height: "20%", background: "rgb(243, 244, 246)", display: "flex", alignItems: "center", width: "100%", padding: "0 3rem", gap: "2rem" }}>
-                                <div style={{ height: "100%", display: "flex", alignContent: "center", color: "black", alignItems: "center", gap: 5 }}>
-                                    <img src="https://pic.onlinewebfonts.com/svg/img_218090.png" style={{ width: 25, height: 25 }} />
-                                    <span>0 continbutors</span>
-                                </div>
-                                <div style={{ height: "100%", display: "flex", alignContent: "center", color: "black", alignItems: "center", gap: 5 }}>
-                                    <img src="https://pic.onlinewebfonts.com/svg/img_568900.png" style={{ width: 25, height: 25 }} />
-                                    <span>0 audiences</span>
-                                </div>
-                                <div
-                                    style={{ height: "100%", display: "flex", alignContent: "center", color: "black", alignItems: "center", gap: 5 }}>
-                                    <img src="https://pic.onlinewebfonts.com/svg/img_353628.png" style={{ width: 25, height: 25 }} />
-                                    <span>Budget of $0</span>
+                                    <div className="flex items-center ml-6">
+                                        <CurrencyDollarIcon className="w-5 h-5 text-gray-500" />
+                                        <p className="text-gray-500 font-semibold ml-1">{`Budget of $${budget}`}</p>
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
+                        );
+                    })}
 
                 </div>
 

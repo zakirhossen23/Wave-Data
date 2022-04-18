@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import Header from '../../components/layout/Header'
 export default function Policy() {
     return (
         <>
+         <Header/>
           <div className="mb-5" style={{ textAlign: "left", padding: "0 5%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <h1>Privacy Policy for Wave Data</h1>
                 <div>

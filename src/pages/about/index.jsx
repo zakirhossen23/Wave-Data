@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import Header from '../../components/layout/Header'
 import './about.css'
 export default function AboutUs() {
 
 
     return (
         <>
+            <Header />
             <div className="section">
                 <div className="container">
                     <div className="content-section">
@@ -22,20 +22,10 @@ export default function AboutUs() {
                                 aliquip ex ea commodo consequat.
                             </p>
                             <div className="button">
-                                <a href="">Read More</a>
+                                <a href="/privacy">Read More</a>
                             </div>
                         </div>
-                        <div className="social">
-                            <a href="">
-                                <i className="fab fa-facebook-f" />
-                            </a>
-                            <a href="">
-                                <i className="fab fa-twitter" />
-                            </a>
-                            <a href="">
-                                <i className="fab fa-instagram" />
-                            </a>
-                        </div>
+               
                     </div>
                     <div className="image-section">
                         <img src="/favicon.ico" />

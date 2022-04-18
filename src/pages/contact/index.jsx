@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React from 'react';
+import Header from '../../components/layout/Header'
 import './contact.css'
 
-export default function Contact() {
+export default function Contact() { 
     var emailjs = require('emailjs')
     async function SendMessage() {
         var nameBox = document.getElementById("name");
@@ -49,8 +48,9 @@ export default function Contact() {
 
     return (
         <>
+         <Header />
             <div className="contact-row"  style={{margin: '0'}}>
-                <Col>
+                <div className="col">
                     <section class="ftco-section">
                         <div class="container">
 
@@ -130,7 +130,7 @@ export default function Contact() {
                             </div>
                         </div>
                     </section>
-                </Col>
+                </div>
             </div>
         </>
     )

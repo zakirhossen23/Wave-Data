@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import Header from '../../components/layout/Header'
 import './faq.css'
 export default function FAQ() {
 
@@ -18,7 +17,7 @@ export default function FAQ() {
         // Toggle targeted element to show with froEach Loop.
         faqTag.forEach(item => {
             item.addEventListener('click', e => {
-                if (e.target.className == 'btn') {
+                if (e.target.className == 'faq-btn btn') {
                     hideTag()
                     e.target.parentElement.classList.toggle('open');
                     e.target.innerHTML = '&#8722;';
@@ -30,7 +29,8 @@ export default function FAQ() {
     return (
         <>
             <>
-                <h1>Frequently Asked Questions</h1>
+            <Header />
+                <h1 className='text-center'>Frequently Asked Questions</h1>
                 <div style={{ padding: "0 5%" }}>
                     <div className="faq">
                         {/* FAQ 1 */}
