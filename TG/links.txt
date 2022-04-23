@@ -1,0 +1,14 @@
+Create Account TG api:
+	format:
+		https://wavedata.i.tgcloud.io/api/restpp/query/WaveData/CreateAccount?FullNameTXT={decoded FullName}&emailTXT={decoded email}&passwordTXT={decoded password}
+	example:
+		https://wavedata.i.tgcloud.io/api/restpp/query/WaveData/CreateAccount?emailTXT=zakirhoss12345%40gmail.com&firstnameTXT=zakir&lastnameTXT=hossen&passwordTXT=zakir%25%25%24
+
+
+Login TG api:
+	format:
+		https://wavedata.i.tgcloud.io/api/restpp/query/WaveData/Login?emailTXT={decoded email}&passwordTXT={decoded password}
+	example:
+		https://wavedata.i.tgcloud.io/api/restpp/query/WaveData/Login?emailTXT=zakirhoss12345%40gmail.com&passwordTXT=zakir%25%25%24
+
+https://wavedata.i.tgcloud.io/api/restpp/query/WaveData
