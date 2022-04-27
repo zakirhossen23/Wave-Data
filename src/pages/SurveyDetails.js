@@ -167,7 +167,7 @@ function SurveyDetails() {
       addQuestionBTN.classList.add("cursor-default")
       addQuestionBTN.disabled = true;
 
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateQuestion?sectionidTXT=${encodeURIComponent(sectionsidTXT)}&surveyID=${parseInt(params.id)}`, {
+      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateQuestion?sectionidTXT=${encodeURIComponent(sectionsidTXT)}&surveyID=${encodeURIComponent(params.id)}&trialidTXT=${parseInt(location.state.trialID)}`, {
          "headers": {
             "accept-language": "en-US,en;q=0.9",
             "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
@@ -230,7 +230,7 @@ function SurveyDetails() {
    async function LoadDataSections() {
       setsectionsdata([])
       sleep(100)
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/LoadSection?surveyIDTXT=${parseInt(params.id)}`, {
+      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/LoadSection?surveyIDTXT=${encodeURIComponent(params.id)}`, {
          "headers": {
             "accept-language": "en-US,en;q=0.9",
             "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
@@ -292,7 +292,7 @@ function SurveyDetails() {
       AddLimitedBTN.classList.add("cursor-default")
       AddLimitedBTN.disabled = true;
       let questionidTXT = item.id;
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateLimitedAnswer?questionidTXT=${encodeURIComponent(questionidTXT)}&surveyidTXT=${parseInt(params.id)}&sectionidTXT=${encodeURIComponent(item.sectionid)}`, {
+      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateLimitedAnswer?questionidTXT=${encodeURIComponent(questionidTXT)}&surveyidTXT=${parseInt(params.id)}&sectionidTXT=${encodeURIComponent(item.sectionid)}&trialidTXT=${parseInt(location.state.trialID)}`, {
          "headers": {
             "accept-language": "en-US,en;q=0.9",
             "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
@@ -369,7 +369,6 @@ function SurveyDetails() {
       return (<><div className="ml-4" style={{ width: '48.7%' }} id={`AnswerType${item.id}`}>
          <select id="testID" defaultValue={item.questiontype2} onChange={(e) => { updateQuestionAnswerType(item.id, e.target.value) }} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ "width": "100%" }}>
             <option value="1-5">Rating from 1 to 5</option>
-            <option value="1-10">Rating from 1 to 10</option>
          </select>
       </div></>)
    }
