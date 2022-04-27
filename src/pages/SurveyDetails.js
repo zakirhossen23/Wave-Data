@@ -650,7 +650,8 @@ function SurveyDetails() {
    }
 
    async function loadGraph() {
-      for (let index = 0; index < sectionsQuestionsdata.length; index++) {
+      for (let sectindex = 0; sectindex <sectionsdata.length; sectindex++){
+            for (let index = 0; index < sectionsQuestionsdata.length; index++) {
          const eleQ = sectionsQuestionsdata[index];
          axios
             .post(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/GetSurveyAnswers?questionidTXT=${encodeURIComponent(eleQ.id)}`, {}, {
@@ -717,12 +718,12 @@ function SurveyDetails() {
                   }
 
                   Thisstate.data = result;
-                  const container = document.getElementById(`container${index}`);
+                  const container = document.getElementById(`section${sectindex}container${index}`);
                   const width = 400;
                   const height = 400;
                   container.innerHTML = "";
                   const graph = new G6.TreeGraph({
-                     container: `container${index}`,
+                     container: `section${sectindex}container${index}`,
                      width,
                      height,
                      modes: {
@@ -795,6 +796,8 @@ function SurveyDetails() {
                console.error(err);
             });
       }
+      }
+   
 
    }
    useEffect(() => {
@@ -932,20 +935,20 @@ function SurveyDetails() {
          )}
          {tabIndex === 1 && (
             <>
-               {sectionsdata.map((item, index) => {
+               {sectionsdata.map((item, sectindex) => {
 
                   return (
                      <div className="bg-white border border-gray-400 rounded-lg flex flex-col mt-4 overflow-hidden">
                         <div className="bg-gray-100 py-4 px-6 border-b border-b-gray-400">
                            <div className="flex mb-4 items-center">
-                              <p className="text-2xl font-semibold flex-1">{`Section ${index + 1}: ${item.category}`}</p>
+                              <p className="text-2xl font-semibold flex-1">{`Section ${sectindex + 1}: ${item.category}`}</p>
                            </div>
                         </div>
                         {sectionsQuestionsdata.filter(eq => eq.sectionid == item.id).map((item, index) => {
                            return (
                               <div className="border-b border-b-gray-400 p-4">
                                  <p className="text-xl font-semibold">{`Question ${index + 1}: ${item.question}`}</p>
-                                 <div id={`container${index}`}></div>
+                                 <div id={`section${sectindex}container${index}`}></div>
                               </div>
                            );
                         })}
