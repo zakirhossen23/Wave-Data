@@ -5,11 +5,13 @@ import Select from 'react-select';
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { PlusSmIcon, ChevronRightIcon, PencilIcon, TrashIcon, DocumentDuplicateIcon } from "@heroicons/react/solid";
 import { PieChart, Pie, Tooltip } from 'recharts';
-
+import axios from 'axios';
+import G6 from '@antv/g6';
 import UpdateSurveyModal from '../components/modal/UpdateSurvey'
 function SurveyDetails() {
    var Thisstate = {
-      sectionsloaded: false
+      sectionsloaded: false,
+      data: []
    }
    const params = useParams();
    const navigate = useNavigate();
@@ -110,7 +112,7 @@ function SurveyDetails() {
 
    const dataCategory = [
       {
-         value: "0",
+         value: "Emotional health activities",
          text: 'Emotional health activities',
          icon: <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_476_15862)">
@@ -655,6 +657,157 @@ function SurveyDetails() {
       console.log("changed", e)
    }
 
+   async function loadGraph() {
+      for (let index = 0; index < sectionsQuestionsdata.length; index++) {
+         const eleQ = sectionsQuestionsdata[index];
+         axios
+            .post(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/GetSurveyAnswers?questionidTXT=${encodeURIComponent(eleQ.id)}`, {}, {
+               headers: {
+                  "accept-language": "en-US,en;q=0.9",
+                  "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
+               }
+            }).then((res) => {
+               if (res.status === 200) {
+                  var answersids = [];
+                  var alldata = [];
+                  var allusersData = res.data['results'][1]['USERS'];
+                  res.data['results'][0]['SV'].forEach(element => {
+                     answersids.push(element['attributes']['answer'])
+                     alldata.push(element['attributes'])
+
+                  });
+                  console.log(allusersData);
+                  var count = 0;
+                  var children = [];
+
+                  function GetUsers(answer) {
+                     var allusers = [];
+                     var usercount = 0;
+                     alldata.forEach(element => {
+                        if (element['answer'] == answer) {
+                           var userdata = allusersData.filter(e => e.userid == element['userid'])[0];
+                           allusers.push({
+                              "children": [],
+                              "email": userdata['email'],
+                              "id": `${ userdata['username']}${usercount.toString()}`,
+                              "name": userdata['username'],
+                              "style": {
+                                 "fill": "#c99cdf",
+                                 "stroke": "#A800FB"
+                              }
+
+                           })
+                        }
+                     })
+                     return allusers;
+                  }
+
+                  answersids.forEach(element => {
+                     children.push({
+                        "children": GetUsers(element),
+                        "id": "answer " + count.toString(),
+                        "name": `Answer ${element}`,
+                        "style": {
+                           "fill": "#d28b69",
+                           "stroke": "#F9641D"
+                        }
+                     })
+                     count++;
+                  })
+                  var result = {
+                     "name": "question",
+                     "id": "question",
+                     "children": children,
+                     "style": {
+                        "fill": "#FFD8D9",
+                        "stroke": "#FF6D67",
+                     }
+                  }
+
+                  Thisstate.data = result;
+                  const container = document.getElementById(`container${index}`);
+                  const width = 400;
+                  const height = 400;
+                  container.innerHTML = "";
+                  const graph = new G6.TreeGraph({
+                     container: `container${index}`,
+                     width,
+                     height,
+                     modes: {
+                        default: [
+                           {
+                              type: 'collapse-expand',
+                              onChange: function onChange(item, collapsed) {
+                                 const data = item.get('model');
+                                 data.collapsed = collapsed;
+                                 return true;
+                              },
+                           },
+                           'drag-canvas',
+                           'zoom-canvas',
+                           'drag-node',
+                           'activate-relations',
+                        ],
+                     },
+                     defaultNode: {
+                        size: 55,
+                     },
+                     layout: {
+                        type: 'dendrogram',
+                        direction: 'RL',
+                        nodeSep: 10,
+                        rankSep: 200,
+                        radial: true,
+                     },
+                  });
+                  graph.node(function (node) {
+                     console.log("here=>", node);
+                     return {
+                        label: `${node['name']}`
+                     };
+                  });
+
+                  graph.edge(function (node) {
+                     return {
+                        label: `${node.id}`,
+                     };
+                  });
+
+                  graph.data(Thisstate.data);
+
+                  graph.render();
+                  graph.fitView();
+                  graph.get('canvas').set('localRefresh', false);
+                  graph.on('node:click', (evt) => {
+                     const nodeItem = evt.item;
+                     if (!nodeItem) return;
+                     const item = nodeItem.getModel();
+                     if (item.url) {
+                        window.open(item.url);
+                     }
+                  });
+                  if (typeof window !== 'undefined')
+                     window.onresize = () => {
+                        if (!graph || graph.get('destroyed')) return;
+                        if (
+                           !container ||
+                           !container.scrollWidth ||
+                           !container.scrollHeight
+                        )
+                           return;
+                        graph.changeSize(container.scrollWidth, container.scrollHeight);
+                     };
+               }
+            })
+            .catch((err) => {
+               console.error(err);
+            });
+      }
+
+   }
+   useEffect(() => {
+      loadGraph();
+   }, [tabIndex])
    return (
       <>
          <div className="bg-white border border-gray-400 rounded-lg py-4 px-6 flex mb-2 items-center">
@@ -731,7 +884,7 @@ function SurveyDetails() {
                               placeholder="Select Category"
                               onChange={(e) => { sectionsdata[index].category = e.value; updateSections() }}
                               options={dataCategory}
-                              defaultValue={dataCategory[Number(item.category)]}
+                              defaultValue={dataCategory.filter(edata=>edata.value ==(item.category))[0]}
                               getOptionLabel={e => (
                                  <div style={{ display: 'flex', alignItems: 'center' }}>
                                     {e.icon}
@@ -787,7 +940,8 @@ function SurveyDetails() {
          )}
          {tabIndex === 1 && (
             <>
-               {responses.map((item, index) => {
+               {sectionsdata.map((item, index) => {
+
                   return (
                      <div className="bg-white border border-gray-400 rounded-lg flex flex-col mt-4 overflow-hidden">
                         <div className="bg-gray-100 py-4 px-6 border-b border-b-gray-400">
@@ -795,25 +949,11 @@ function SurveyDetails() {
                               <p className="text-2xl font-semibold flex-1">{`Section ${index + 1}: ${item.category}`}</p>
                            </div>
                         </div>
-                        {item.questions.map((item, index) => {
+                        {sectionsQuestionsdata.filter(eq => eq.sectionid == item.id).map((item, index) => {
                            return (
                               <div className="border-b border-b-gray-400 p-4">
                                  <p className="text-xl font-semibold">{`Question ${index + 1}: ${item.question}`}</p>
-                                 {item.type === 'yes/no' && (
-                                    <PieChart width={400} height={400}>
-                                       <Pie
-                                          dataKey="value"
-                                          isAnimationActive={false}
-                                          data={item.data}
-                                          cx="50%"
-                                          cy="50%"
-                                          outerRadius={80}
-                                          fill="#8884d8"
-                                          label
-                                       />
-                                       <Tooltip />
-                                    </PieChart>
-                                 )}
+                                 <div id={`container${index}`}></div>
                               </div>
                            );
                         })}
