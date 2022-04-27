@@ -901,7 +901,7 @@ function SurveyDetails() {
                                  <input type="text" onKeyDown={(e) => { sectionsQuestionsdata.filter(e2 => { return e2.id == itemQuestions.id })[0].question = e.target.value; startTyping(e) }} defaultValue={itemQuestions.question} questionid={itemQuestions.id} className="border py-1 px-2 w-full" placeholder="What is your question?" />
 
                                  <div className="flex flex-wrap mt-2">
-                                    <select name={`questiontype${index}`} defaultValue={itemQuestions.questiontype} onChange={(e) => { QustionsWithType(itemQuestions.id, itemQuestions, e.target.value) }} sectionid={sectindex} questionid={itemQuestions.id} id={`questiontype${index}`} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ width: "49%", "fontFamily": "FontAwesome" }}>
+                                    <select name={`questiontype${index}`} defaultValue={itemQuestions.questiontype} onChange={(e) => { sectionsQuestionsdata.filter(e2 => { return e2.id == itemQuestions.id })[0].questiontype = e.target.value;QustionsWithType(itemQuestions.id, itemQuestions, e.target.value) }} sectionid={sectindex} questionid={itemQuestions.id} id={`questiontype${index}`} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ width: "49%", "fontFamily": "FontAwesome" }}>
                                        <option value="rating" className="fa-solid"> &#xf118; Rating question</option>
                                        <option value="yes/no">&#xf058; Yes/no question</option>
                                        <option value="limited">&#xf0c9; Limited question</option>
