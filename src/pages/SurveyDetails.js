@@ -212,7 +212,7 @@ function SurveyDetails() {
    }
    async function LoadSurveyData() {
       setSURVEY_DATA({})
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/SelectSurveyByID?idTXT=${parseInt(params.id)}`, {
+      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/SelectSurveyByID?idTXT=${encodeURIComponent(params.id)}`, {
          "headers": {
             "accept-language": "en-US,en;q=0.9",
             "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
@@ -454,7 +454,7 @@ function SurveyDetails() {
       document.getElementById("surveyDelete").classList.remove("hover:bg-white");
       document.getElementById("surveyDelete").classList.remove("cursor-pointer");
       var Delete = new Promise(async (resolve, reject) => {
-         const textDelete = `DeleteSurvey?idTXT=${parseInt(params.id)}`;
+         const textDelete = `DeleteSurvey?idTXT=${encodeURIComponent(params.id)}`;
          await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/${textDelete}`, {
             "headers": {
                "accept-language": "en-US,en;q=0.9",
@@ -827,7 +827,7 @@ async function duplicateQuestion(e,item){
                setModalShow(false);
                LoadSurveyData()
             }}
-            id={Number(params.id)}
+            id={(params.id)}
          />
       </>
    );

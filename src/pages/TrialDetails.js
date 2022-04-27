@@ -640,7 +640,7 @@ function TrialDetails() {
                setModalShow(false);
                LoadData()
             }}
-            id={Number(params.id)}
+            id={(params.id)}
          />
          <CreateSurveyModal
             show={CreateSurveymodalShow}
