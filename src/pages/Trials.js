@@ -58,7 +58,7 @@ function Trials() {
             return (               
                <div className={`bg-white border border-gray-400 rounded-lg overflow-hidden ${!IS_LAST && 'mb-2'}`}>
                   <div className="flex p-6">
-                     <img src={image} alt="Trial" className="w-[128px] h-[128px] object-cover" />
+                     <img src={image} alt="Trial" className="w-[128px] h-[128px] object-cover max-w-xs" />
                      <div className="mx-8 flex-1">
                         <p className="text-3xl font-semibold">{title}</p>
                         <p className="mt-6">{`${description.slice(0, 180)}...`}</p>
