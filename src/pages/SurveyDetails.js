@@ -361,7 +361,7 @@ function SurveyDetails() {
 
    function RatingAnswer({ item }) {
       return (<><div className="ml-4 bg-white" style={{ width: '48.7%' }} id={`AnswerType${item.id}`}>
-         <select id="testID" defaultValue={item.questiontype2} onChange={(e) => { updateQuestionAnswerType(item.id, e.target.value) }} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ "width": "100%" }}>
+         <select id="testID" defaultValue={item.questiontype2} onChange={(e) => {sectionsQuestionsdata.filter(es=>es.id == item.id)[0].questiontype2=e.target.value; updateQuestionAnswerType(item.id, e.target.value) }} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ "width": "100%" }}>
             <option value="1-3">Rating from 1 to 3</option>
             <option value="1-5">Rating from 1 to 5</option>
          </select>
