@@ -22,7 +22,7 @@ export default function CreateSurveyModal({
         surveyBTN.children[1].innerText = ""
         surveyBTN.disabled = true;
         try {
-            await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateSurvey?nameTXT=${encodeURIComponent(name.value)}&descriptionTXT=${encodeURIComponent(description.value)}&dateTXT=${encodeURIComponent(d)}&imageTXT=${encodeURIComponent(image.value)}&RewardTXT=${Number(reward.value)}&TiralidTXT=${Tiralid}`, {
+            await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateSurvey?nameTXT=${encodeURIComponent(name.value)}&descriptionTXT=${encodeURIComponent(description.value)}&dateTXT=${encodeURIComponent(d)}&imageTXT=${encodeURIComponent(image.value)}&RewardTXT=${Number(reward.value)}&TiralidTXT=${parseInt(Tiralid)}`, {
                 "headers": {
                     "accept-language": "en-US,en;q=0.9",
                     "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
