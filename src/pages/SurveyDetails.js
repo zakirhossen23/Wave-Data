@@ -132,7 +132,7 @@ function SurveyDetails() {
    async function addSection(e) {
       var addSectionBTN = e.currentTarget;
       addSectionBTN.classList.remove("hover:bg-gray-600")
-      addSectionBTN.classList.remove("bg-black")     
+      addSectionBTN.classList.remove("bg-black")
       addSectionBTN.classList.add("bg-gray-400")
       addSectionBTN.classList.add("cursor-default")
       addSectionBTN.disabled = true;
@@ -149,7 +149,7 @@ function SurveyDetails() {
             category: ""
          }]);
          addSectionBTN.classList.add("hover:bg-gray-600")
-         addSectionBTN.classList.add("bg-black")     
+         addSectionBTN.classList.add("bg-black")
          addSectionBTN.classList.remove("bg-gray-400")
          addSectionBTN.classList.remove("cursor-default")
          addSectionBTN.disabled = false;
@@ -162,7 +162,7 @@ function SurveyDetails() {
       var addQuestionBTN = e.currentTarget;
       let sectionsidTXT = e.currentTarget.getAttribute("sectionsid");
       addQuestionBTN.classList.remove("hover:bg-gray-600")
-      addQuestionBTN.classList.remove("bg-black")     
+      addQuestionBTN.classList.remove("bg-black")
       addQuestionBTN.classList.add("bg-gray-400")
       addQuestionBTN.classList.add("cursor-default")
       addQuestionBTN.disabled = true;
@@ -184,11 +184,11 @@ function SurveyDetails() {
             questiontype2: "1-5"
          }]);
          addQuestionBTN.classList.add("hover:bg-gray-600")
-         addQuestionBTN.classList.add("bg-black")     
+         addQuestionBTN.classList.add("bg-black")
          addQuestionBTN.classList.remove("bg-gray-400")
          addQuestionBTN.classList.remove("cursor-default")
-   
-   
+
+
          addQuestionBTN.disabled = false;
       })
 
@@ -249,7 +249,7 @@ function SurveyDetails() {
    async function LoadDataQuestions() {
       setsectionsQuestionsdata([])
       sleep(100)
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/LoadQuestionBySurveyID?surveyIDTXT=${parseInt(params.id)}`, {
+      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/LoadQuestionBySurveyID?surveyIDTXT=${encodeURIComponent(params.id)}`, {
          "headers": {
             "accept-language": "en-US,en;q=0.9",
             "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
@@ -285,14 +285,14 @@ function SurveyDetails() {
    }
 
 
-   async function AddLimitedAnswer(e,item) {
-      var AddLimitedBTN= e.currentTarget;
+   async function AddLimitedAnswer(e, item) {
+      var AddLimitedBTN = e.currentTarget;
       AddLimitedBTN.classList.remove("hover:bg-white")
       AddLimitedBTN.classList.add("bg-gray-300")
       AddLimitedBTN.classList.add("cursor-default")
       AddLimitedBTN.disabled = true;
       let questionidTXT = item.id;
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateLimitedAnswer?questionidTXT=${encodeURIComponent(questionidTXT)}&surveyidTXT=${parseInt(params.id)}&sectionidTXT=${encodeURIComponent(item.sectionid)}&trialidTXT=${parseInt(location.state.trialID)}`, {
+      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateLimitedAnswer?questionidTXT=${encodeURIComponent(questionidTXT)}&surveyidTXT=${encodeURIComponent(params.id)}&sectionidTXT=${encodeURIComponent(item.sectionid)}&trialidTXT=${parseInt(location.state.trialID)}`, {
          "headers": {
             "accept-language": "en-US,en;q=0.9",
             "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
@@ -366,8 +366,9 @@ function SurveyDetails() {
 
 
    function RatingAnswer({ item }) {
-      return (<><div className="ml-4" style={{ width: '48.7%' }} id={`AnswerType${item.id}`}>
+      return (<><div className="ml-4 bg-white" style={{ width: '48.7%' }} id={`AnswerType${item.id}`}>
          <select id="testID" defaultValue={item.questiontype2} onChange={(e) => { updateQuestionAnswerType(item.id, e.target.value) }} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ "width": "100%" }}>
+            <option value="1-3">Rating from 1 to 3</option>
             <option value="1-5">Rating from 1 to 5</option>
          </select>
       </div></>)
@@ -380,8 +381,8 @@ function SurveyDetails() {
             all.push(<>
                <div style={{ display: "flex", width: "49%", alignItems: "center", fontSize: 19, justifyContent: "space-between" }} className="mt-3">
                   <span style={{ fontWeight: 700 }}>Answer {index + 1}</span>
-                  <input  onKeyUp={(e) => { LimitedAnswerdata.filter(e2 => e2.id == itemQuestions.id)[0].answer=e.target.value;startTypingLimitedAnswers(e, itemQuestions) }} type="text" defaultValue={itemQuestions.answer} className="border py-1 px-2" placeholder="Answer" style={{ width: "69%" }} />
-                  <button onClick={(e)=>{DeleteLimitedAnswer(e,itemQuestions)}} orderid={index} className="flex w-[52px] h-10 border border-gray-400 bg-gray-200 rounded-md justify-center items-center hover:bg-white">
+                  <input onKeyUp={(e) => { LimitedAnswerdata.filter(e2 => e2.id == itemQuestions.id)[0].answer = e.target.value; startTypingLimitedAnswers(e, itemQuestions) }} type="text" defaultValue={itemQuestions.answer} className="border py-1 px-2" placeholder="Answer" style={{ width: "69%" }} />
+                  <button onClick={(e) => { DeleteLimitedAnswer(e, itemQuestions) }} orderid={index} className="flex w-[52px] h-10 border border-gray-400 bg-gray-200 rounded-md justify-center items-center hover:bg-white">
                      <TrashIcon className="w-5 h-5" />
                   </button>
                </div>
@@ -396,7 +397,7 @@ function SurveyDetails() {
             <div>
                <Allanswer item={item} />
 
-               <button onClick={(e) => AddLimitedAnswer(e,item)} className="h-10 mt-3 rounded-md border-solid border bg-gray-100 flex py-2 px-4 items-center text-gray-700 hover:bg-white">
+               <button onClick={(e) => AddLimitedAnswer(e, item)} className="h-10 mt-3 rounded-md border-solid border bg-gray-100 flex py-2 px-4 items-center text-gray-700 hover:bg-white">
                   <PlusSmIcon className="w-5 h-5 " />
                   <p className="ml-2"> Answer</p>
                </button>
@@ -419,22 +420,23 @@ function SurveyDetails() {
       if (type === "rating") {
          answerplace.style = `width: 47.2%;`;
          answerplace.innerHTML = `
-         <select class="h-10 px-1 rounded-md border border-gray-200 outline-none " style="width: 100%">
+         <select class="h-10 px-1 rounded-md border border-gray-200 outline-none bg-white" style="width: 100%">
+         <option value="1-3">Rating from 1 to 3</option>
          <option value="1-5">Rating from 1 to 5</option>
-         <option value="1-10">Rating from 1 to 10</option>
+         
       </select>
          `
       } else if (type === "yes/no") {
          try {
-             answerplace.innerHTML = ""
-         } catch (error) {}
-        
-      } else if (type === "limited") {  
+            answerplace.innerHTML = ""
+         } catch (error) { }
+
+      } else if (type === "limited") {
          try {
-            answerplace.className=""
+            answerplace.className = ""
             answerplace.style = `width: 100%;`;
-        } catch (error) {}
-        
+         } catch (error) { }
+
          sectionsQuestionsdata.filter((e) => { return e.id == questionid })[0].questiontype2 = ""
          updateQuestionAnswerType(questionid, "")
          ReactDOM.render(
@@ -444,7 +446,7 @@ function SurveyDetails() {
       } else if (type === "open") {
          try {
             answerplace.innerHTML = ""
-        } catch (error) {}
+         } catch (error) { }
       }
    }
 
@@ -551,11 +553,11 @@ function SurveyDetails() {
       await Delete
       removeElementFromArrayBYID(sectionsQuestionsdata, questionid, setsectionsQuestionsdata)
    }
-     async function DeleteLimitedAnswer(e,item) {
+   async function DeleteLimitedAnswer(e, item) {
       var DeleteBTN = e.currentTarget;
       DeleteBTN.disabled = true; DeleteBTN.classList.remove("hover:bg-white"); DeleteBTN.classList.remove("cursor-pointer");
-      let id = item.id   
-      let orderid = DeleteBTN.getAttribute("orderid")  
+      let id = item.id
+      let orderid = DeleteBTN.getAttribute("orderid")
       var Delete = new Promise(async (resolve, reject) => {
          const textDelete = `DeleteLimitedAnswerByID?idTXT=${encodeURIComponent(id)}`;
          await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/${textDelete}`, {
@@ -572,28 +574,28 @@ function SurveyDetails() {
       });
       await Delete
       removeElementFromArrayBYID(LimitedAnswerdata, id, setLimitedAnswerdata)
-   } 
+   }
 
-async function duplicateQuestion(e,item){
-   var DuplicateBTN = e.currentTarget;
-   DuplicateBTN.disabled = true; DuplicateBTN.classList.remove("hover:bg-white"); DuplicateBTN.classList.remove("cursor-pointer");
-   let id = item.id   
-   var Duplicate = new Promise(async (resolve, reject) => {
-      const textDelete = `DeleteLimitedAnswerByID?idTXT=${encodeURIComponent(id)}`;
-      await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/${textDelete}`, {
-         "headers": {
-            "accept-language": "en-US,en;q=0.9",
-            "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
-         },
-         "body": null,
-         "method": "GET"
-      }).then(e => {
-         resolve(e.json)
-      })
+   async function duplicateQuestion(e, item) {
+      var DuplicateBTN = e.currentTarget;
+      DuplicateBTN.disabled = true; DuplicateBTN.classList.remove("hover:bg-white"); DuplicateBTN.classList.remove("cursor-pointer");
+      let id = item.id
+      var Duplicate = new Promise(async (resolve, reject) => {
+         const textDelete = `DeleteLimitedAnswerByID?idTXT=${encodeURIComponent(id)}`;
+         await fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/${textDelete}`, {
+            "headers": {
+               "accept-language": "en-US,en;q=0.9",
+               "Authorization": "Bearer h6t28nnpr3e58pdm1c1miiei4kdcejuv",
+            },
+            "body": null,
+            "method": "GET"
+         }).then(e => {
+            resolve(e.json)
+         })
 
-   });
-   await Duplicate
-}
+      });
+      await Duplicate
+   }
 
    useEffect(() => {
       LoadDataTrial();
@@ -747,11 +749,11 @@ async function duplicateQuestion(e,item){
                                     <button questionid={itemQuestions.id} questionidOrder={index} onClick={(e) => { deleteQuestion(e) }} className="flex w-[52px] h-10 border border-gray-400 bg-gray-200 rounded-md justify-center items-center hover:bg-white">
                                        <TrashIcon className="w-5 h-5 text-gray-400" />
                                     </button>
-                                    <button onClick={(e)=>{duplicateQuestion(e,itemQuestions)}} className="flex w-[52px] h-10 border border-gray-400 bg-gray-200 rounded-md justify-center items-center ml-1">
+                                    <button onClick={(e) => { duplicateQuestion(e, itemQuestions) }} className="flex w-[52px] h-10 border border-gray-400 bg-gray-200 rounded-md justify-center items-center ml-1">
                                        <DocumentDuplicateIcon className="w-5 h-5 text-gray-400" />
                                     </button>
                                  </div>
-                                 <input type="text" onKeyDown={(e) => {sectionsQuestionsdata.filter(e2=>{return e2.id==itemQuestions.id})[0].question=e.target.value; startTyping(e) }} defaultValue={itemQuestions.question} questionid={itemQuestions.id} className="border py-1 px-2 w-full" placeholder="What is your question?" />
+                                 <input type="text" onKeyDown={(e) => { sectionsQuestionsdata.filter(e2 => { return e2.id == itemQuestions.id })[0].question = e.target.value; startTyping(e) }} defaultValue={itemQuestions.question} questionid={itemQuestions.id} className="border py-1 px-2 w-full" placeholder="What is your question?" />
 
                                  <div className="flex flex-wrap mt-2">
                                     <select name={`questiontype${index}`} defaultValue={itemQuestions.questiontype} onChange={(e) => { QustionsWithType(itemQuestions.id, itemQuestions, e.target.value) }} sectionid={sectindex} questionid={itemQuestions.id} id={`questiontype${index}`} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ width: "49%", "fontFamily": "FontAwesome" }}>
