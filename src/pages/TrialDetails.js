@@ -391,7 +391,7 @@ function TrialDetails() {
          </div>
          <div className={`bg-white border border-gray-400 rounded-lg overflow-hidden mb-2`}>
             <div className="flex p-6">
-               <img src={TRIAL_DATA?.image} alt="Trial" className="object-cover" />
+               <img src={TRIAL_DATA?.image} alt="Trial" className="object-cover max-w-xs" />
                <div className="mx-8 flex-1">
                   <p className="text-3xl font-semibold">{TRIAL_DATA?.title}</p>
                   <p className="mt-6">{TRIAL_DATA?.description}</p>
