@@ -593,6 +593,7 @@ function TrialDetails() {
                                     <select name={`race${index}`} id={`race-select${index}`} onChange={(e) => { audiences[index].Race = e.target.value }} className="h-10 px-1 rounded-md border border-gray-200 outline-none w-full" defaultValue={item.Race}>
                                        <option value="">Select a race</option>
                                        <option value="asian">Asian</option>
+                                       <option value="asian">African America</option>
                                        <option value="american-indian">American Indian</option>
                                        <option value="black">Black</option>
                                        <option value="hispanic">Hispanic</option>
@@ -605,6 +606,7 @@ function TrialDetails() {
                                        <option value="">Select a gender</option>
                                        <option value="male">Male</option>
                                        <option value="female">Female</option>
+                                       <option value="everyone">Everyone</option>
                                     </select>
                                  </td>
                                  <td className="flex justify-end items-center h-[72.5px] py-3">
