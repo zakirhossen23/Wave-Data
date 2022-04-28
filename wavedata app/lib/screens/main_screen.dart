@@ -1242,59 +1242,136 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 24, bottom: 24),
+                              margin: EdgeInsets.only(
+                                top: 24,
+                              ),
                               child: Text(
                                 ongoingTrials['title'].toString(),
                                 style: const TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                             ),
-                            CircularPercentIndicator(
-                              radius: 58.0,
-                              lineWidth: 8.0,
-                              percent:
-                                  userDetails['totalongoingcredit'] == null ||
-                                          userDetails['ongoingcredit'] == null
-                                      ? 0
-                                      : percentagecompleted(),
-                              circularStrokeCap: CircularStrokeCap.round,
-                              progressColor: Color(0xFFf06129),
-                              backgroundColor: Color(0xFF7CD1E3),
-                              center: SizedBox(
-                                width: 110,
-                                child: Container(
-                                  height: 140,
-                                  width: 140,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(128),
-                                  ),
+                            Row(
+                              children: [
+                                Container(
                                   child: Container(
-                                    margin: EdgeInsets.only(top: 8),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          "Total credits",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700),
+                                      margin:
+                                          EdgeInsets.only(top: 120, right: 0),
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(128),
+                                        color: Color.fromRGBO(124, 209, 227, 1),
+                                      ),
+                                      child: Text("")),
+                                ),
+                                Container(
+                                  child: Container(
+                                      margin:
+                                          EdgeInsets.only(top: 30, right: 10),
+                                      height: 80,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(128),
+                                        color: Color.fromRGBO(124, 209, 227, 1),
+                                      ),
+                                      child: Text("")),
+                                ),
+                                Column(
+                                  children: [
+                                    CircularPercentIndicator(
+                                      radius: 58.0,
+                                      lineWidth: 8.0,
+                                      percent: userDetails[
+                                                      'totalongoingcredit'] ==
+                                                  null ||
+                                              userDetails['ongoingcredit'] ==
+                                                  null
+                                          ? 0
+                                          : percentagecompleted(),
+                                      circularStrokeCap:
+                                          CircularStrokeCap.round,
+                                      progressColor: Color(0xFFf06129),
+                                      backgroundColor: Color(0xFF7CD1E3),
+                                      center: SizedBox(
+                                        width: 550,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(128),
+                                          ),
+                                          child: Container(
+                                            margin: EdgeInsets.only(top: 8),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  "Total credits",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                Text(
+                                                  "\$" +
+                                                      userDetails[
+                                                              'ongoingcredit']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Color(0xFFF06129),
+                                                      fontSize: 30,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                )
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                        Text(
-                                          "\$" +
-                                              userDetails['ongoingcredit']
-                                                  .toString(),
-                                          style: TextStyle(
-                                              color: Color(0xFFF06129),
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.w700),
-                                        )
-                                      ],
+                                      ),
                                     ),
+                                  ],
+                                ),
+                                Container(
+                                  child: Container(
+                                    clipBehavior: Clip.none,
+                                    margin: EdgeInsets.only(top: 30, left: 10),
+                                    child: Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        height: 80,
+                                        width: 80,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(128),
+                                          color:
+                                              Color.fromRGBO(124, 209, 227, 1),
+                                        ),
+                                        child: ongoingTrials['image'] != ""
+                                            ? Image.network(
+                                                ongoingTrials['image']
+                                                    .toString(),
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Text("")),
                                   ),
                                 ),
-                              ),
+                                Container(
+                                  child: Container(
+                                      margin:
+                                          EdgeInsets.only(top: 120, right: 0),
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(128),
+                                        color: Color.fromRGBO(124, 209, 227, 1),
+                                      ),
+                                      child: Text("")),
+                                ),
+                              ],
                             )
                           ],
                         ),
@@ -1306,7 +1383,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         children: [
                           SizedBox(
                             width: size.width,
-                            height: 400,
+                            height: 500,
                             child: Container(
                               padding:
                                   EdgeInsets.only(top: 64, left: 20, right: 20),
