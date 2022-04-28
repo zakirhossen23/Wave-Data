@@ -50,6 +50,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   int userid = 0;
   int startTrial = 0;
   String ImageLink = "https://i.postimg.cc/SsxGw5cZ/person.jpg";
+  var userDetails = {
+    "userid": -1,
+    "credits": 0,
+    "ongoingcredit": null,
+    "totalongoingcredit": null
+  };
+
   Future<void> GetAvialbleData() async {
     avilableTrials = [];
     var url = Uri.parse(
@@ -75,7 +82,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       "title": "",
       "description": "",
       "image": "",
-      "startSurvey": 0
+      "startSurvey": 0,
+      "totalprice": 0
     };
     dummyActions = [];
     var url = Uri.parse(
@@ -98,6 +106,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ongoingTrials['title'] = element['attributes']['title'];
           ongoingTrials['description'] = element['attributes']['description'];
           ongoingTrials['image'] = element['attributes']['image'];
+          ongoingTrials['totalprice'] = element['attributes']['budget'];
+          userDetails['totalongoingcredit'] = element['attributes']['budget'];
         });
       } catch (e) {}
     }
@@ -106,6 +116,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       //Surveys
       var SurveyAllElement = data[2]['SRV'];
       var SurveyAllCompletedElement = data[3]['Completed'];
+      int totalcredit = 0;
       for (var i = 0; i < SurveyAllElement.length; i++) {
         var SurveyElement = SurveyAllElement[i];
         var completedSurvey = SurveyAllCompletedElement.where((e) =>
@@ -119,6 +130,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           supportStatus['level1'] = true;
         }
         bool status = completedSurvey.length > 0;
+        totalcredit +=
+            int.parse(SurveyElement['attributes']['reward'].toString());
 
         dummyActions.add(
           TrialAction(
@@ -128,6 +141,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               isDone: status),
         );
       }
+      userDetails['ongoingcredit'] = totalcredit;
     });
   }
 
@@ -139,8 +153,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     if (responseDataTG['results'] != null) {
       var data = (responseDataTG['results']);
       var imageData = data[2]['IMG'][0]['attributes']['image'];
+
       setState(() {
         ImageLink = imageData;
+        userDetails["credits"] = data[2]['IMG'][0]['attributes']['credits'];
       });
       try {
         var allData = data[0]['SV'][0]['attributes'];
@@ -249,6 +265,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           builder: (context) => AuthScreen(),
         ),
       );
+    }
+
+    double percentagecompleted() {
+      int total = int.parse(userDetails['totalongoingcredit'].toString());
+      int price = int.parse(userDetails['ongoingcredit'].toString());
+
+      var t = (1 / (total / price));
+      print(t);
+      return t.toDouble();
     }
 
     Future<void> StartTrial(int trialid) async {
@@ -526,6 +551,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                                       );
                                                       GetOngoingData();
                                                       GetAvialbleData();
+                                                      GetAccountData();
                                                     },
                                                   )),
                                             ),
@@ -1180,8 +1206,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w700),
                                           ),
-                                          const Text(
-                                            "\$ 135",
+                                          Text(
+                                            "\$" +
+                                                userDetails['credits']
+                                                    .toString(),
                                             style: TextStyle(
                                                 color: Color(0xFFF06129),
                                                 fontSize: 34,
@@ -1215,16 +1243,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 24, bottom: 24),
-                              child: const Text(
-                                "Mental health by CVD patients",
-                                style: TextStyle(
+                              child: Text(
+                                ongoingTrials['title'].toString(),
+                                style: const TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                             ),
                             CircularPercentIndicator(
                               radius: 58.0,
                               lineWidth: 8.0,
-                              percent: 0.85,
+                              percent:
+                                  userDetails['totalongoingcredit'] == null ||
+                                          userDetails['ongoingcredit'] == null
+                                      ? 0
+                                      : percentagecompleted(),
                               circularStrokeCap: CircularStrokeCap.round,
                               progressColor: Color(0xFFf06129),
                               backgroundColor: Color(0xFF7CD1E3),
@@ -1249,8 +1281,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700),
                                         ),
-                                        const Text(
-                                          "\$45",
+                                        Text(
+                                          "\$" +
+                                              userDetails['ongoingcredit']
+                                                  .toString(),
                                           style: TextStyle(
                                               color: Color(0xFFF06129),
                                               fontSize: 30,

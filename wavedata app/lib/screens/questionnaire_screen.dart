@@ -97,6 +97,9 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
   }
 
   Future<void> FinishSurvey() async {
+    setState(() {
+      isloading = true;
+    });
     final prefs = await SharedPreferences.getInstance();
     String surveyid = prefs.getString("surveyid").toString();
     int userid = int.parse(prefs.getString("userid").toString());
@@ -107,6 +110,10 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
       final response = await http.get(url, headers: TGheader);
       var responseData = json.decode(response.body);
     } catch (e) {}
+
+    setState(() {
+      isloading = false;
+    });
   }
 
   @override
@@ -114,24 +121,6 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
     GetData();
     super.initState();
   }
-
-  // var dummyLimitationsQuestion = [
-  //   Question(
-  //       id: "1",
-  //       content:
-  //           "Vigorous activities, such as running, lifting heavy objects, participating in strenuous sports"),
-  //   Question(
-  //       id: "2",
-  //       content:
-  //           "Moderate activities, such as moving a table, pushing a vacuum cleaner, bowling, or playing golf"),
-  //   Question(id: "3", content: "Lifting or carrying groceries"),
-  //   Question(id: "4", content: "Climbing several flights of stairs"),
-  //   Question(id: "5", content: "Bending, kneeling, or stooping"),
-  //   Question(id: "6", content: "Walking more than a mile"),
-  //   Question(id: "7", content: "Walking several blocks"),
-  //   Question(id: "8", content: "Walking one block"),
-  //   Question(id: "9", content: "Bathing or dressing yourself"),
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -143,80 +132,97 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
         return Column(
           children: [
             Container(
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 48, right: 48),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: isloading == true
+                  ? Container(
+                      height: size.height,
+                      width: size.width,
+                      child: Center(
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              child: SizedBox(
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFFF06129),
+                                ),
+                                height: 150.0,
+                                width: 150.0,
+                              ))),
+                    )
+                  : Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(bottom: 16),
-                          child: Text(
-                            "General Health",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Color(0xFF423838),
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700),
+                          margin: EdgeInsets.only(left: 48, right: 48),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: Text(
+                                  e['category'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xFF423838),
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Container(
-                        width: size.width,
-                        height: size.height - size.height / 5,
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 80),
-                          itemCount: e['questions'].length,
-                          itemBuilder: ((context, index) => QuestionWidget(
-                                question: e['questions'][index],
-                              )),
+                        SizedBox(
+                          height: 12,
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: 0, left: 24, right: 24, bottom: 24),
-                        child: GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await SaveData();
-                            questionnaireViewmodel.updateIndex(
-                                questionnaireViewmodel.selectedIndex + 1);
-                          },
-                          child: Material(
-                            borderRadius: BorderRadius.circular(8),
-                            elevation: 2,
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Color(0xFFF06129),
+                        Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              width: size.width,
+                              height: size.height - size.height / 5,
+                              child: ListView.builder(
+                                padding: EdgeInsets.only(bottom: 80),
+                                itemCount: e['questions'].length,
+                                itemBuilder: ((context, index) =>
+                                    QuestionWidget(
+                                      question: e['questions'][index],
+                                    )),
                               ),
-                              child: Center(
-                                child: Text(
-                                  "Next",
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 0, left: 24, right: 24, bottom: 24),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  setState(() {
+                                    isloading = true;
+                                  });
+                                  await SaveData();
+                                  questionnaireViewmodel.updateIndex(
+                                      questionnaireViewmodel.selectedIndex + 1);
+                                },
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(8),
+                                  elevation: 2,
+                                  child: Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Color(0xFFF06129),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Next",
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
             )
           ],
         );
@@ -298,170 +304,6 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                                 ))),
                       )
                     ],
-              //  Column(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Container(
-              //           margin: EdgeInsets.only(left: 48, right: 48),
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             children: [
-              //               Container(
-              //                 padding: EdgeInsets.only(bottom: 16),
-              //                 child: Text(
-              //                   "General Health",
-              //                   textAlign: TextAlign.center,
-              //                   style: TextStyle(
-              //                       color: Color(0xFF423838),
-              //                       fontSize: 24,
-              //                       fontWeight: FontWeight.w700),
-              //                 ),
-              //               ),
-              //               Container(
-              //                 margin: EdgeInsets.only(left: 12),
-              //                 child: Image.asset(
-              //                   "assets/images/healthquestion.png",
-              //                 ),
-              //               )
-              //             ],
-              //           ),
-              //         ),
-              //         SizedBox(
-              //           height: 12,
-              //         ),
-              //         Stack(
-              //           alignment: Alignment.bottomCenter,
-              //           children: [
-              //             Container(
-              //               width: size.width,
-              //               height: size.height - size.height / 5,
-              //               child: ListView.builder(
-              //                 padding: EdgeInsets.only(bottom: 80),
-              //                 itemCount: dummyGeneralQuestions.length,
-              //                 itemBuilder: ((context, index) => QuestionWidget(
-              //                       question: dummyGeneralQuestions[index],
-              //                     )),
-              //               ),
-              //             ),
-              //             Container(
-              //               margin: EdgeInsets.only(
-              //                   top: 0, left: 24, right: 24, bottom: 24),
-              //               child: GestureDetector(
-              //                 onTap: () {
-              //                   questionnaireViewmodel.updateIndex(1);
-              //                 },
-              //                 child: Material(
-              //                   borderRadius: BorderRadius.circular(8),
-              //                   elevation: 2,
-              //                   child: Container(
-              //                     height: 40,
-              //                     decoration: BoxDecoration(
-              //                       borderRadius: BorderRadius.circular(8),
-              //                       color: Color(0xFFF06129),
-              //                     ),
-              //                     child: Center(
-              //                       child: Text(
-              //                         "Next",
-              //                         style: TextStyle(
-              //                             fontSize: 16, color: Colors.white),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ],
-              //     ),
-
-              //     //2nd page
-              //     Column(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Container(
-              //           margin: EdgeInsets.only(left: 48, right: 48, bottom: 12),
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             children: [
-              //               Flexible(
-              //                 child: Container(
-              //                   //padding: EdgeInsets.only(bottom: 16),
-              //                   child: Text(
-              //                     "Limitations of activities",
-              //                     textAlign: TextAlign.center,
-              //                     style: TextStyle(
-              //                         color: Color(0xFF423838),
-              //                         fontSize: 24,
-              //                         fontWeight: FontWeight.w700),
-              //                   ),
-              //                 ),
-              //               ),
-              //               Container(
-              //                 //margin: EdgeInsets.only(left: 12),
-              //                 child: Image.asset("assets/images/running.png"),
-              //               )
-              //             ],
-              //           ),
-              //         ),
-              //         Container(
-              //           margin: EdgeInsets.only(left: 48, right: 48),
-              //           child: Text(
-              //               "The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much?",
-              //               textAlign: TextAlign.center,
-              //               style: TextStyle(
-              //                   color: Colors.black,
-              //                   fontSize: 14,
-              //                   fontWeight: FontWeight.w400)),
-              //         ),
-              //         SizedBox(
-              //           height: 12,
-              //         ),
-              //         Stack(
-              //           alignment: Alignment.bottomCenter,
-              //           children: [
-              //             Container(
-              //               width: size.width,
-              //               height: size.height - size.height / 3.3,
-              //               child: ListView.builder(
-              //                 padding: EdgeInsets.only(bottom: 80),
-              //                 itemCount: dummyLimitationsQuestion.length,
-              //                 itemBuilder: ((context, index) => QuestionWidget(
-              //                       question: dummyLimitationsQuestion[index],
-              //                     )),
-              //               ),
-              //             ),
-              //             Container(
-              //               margin: EdgeInsets.only(
-              //                   top: 0, left: 24, right: 24, bottom: 32),
-              //               child: GestureDetector(
-              //                 onTap: () {
-              //                   questionnaireViewmodel.updateIndex(2);
-              //                 },
-              //                 child: Material(
-              //                   borderRadius: BorderRadius.circular(8),
-              //                   elevation: 2,
-              //                   child: Container(
-              //                     height: 40,
-              //                     decoration: BoxDecoration(
-              //                       borderRadius: BorderRadius.circular(8),
-              //                       color: Color(0xFFF06129),
-              //                     ),
-              //                     child: Center(
-              //                       child: Text(
-              //                         "Next",
-              //                         style: TextStyle(
-              //                             fontSize: 16, color: Colors.white),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ],
-              //     ),
             )
           ],
         ),
