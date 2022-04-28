@@ -45,6 +45,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     "accept": "application/fhir+json",
     "x-api-key": "FoWtFhNkC92Zi7Xnt9fkvazavyNbMkGv4pYwoQRO"
   };
+  var supportStatus = {"level1": false, "level2": false};
 
   int userid = 0;
   int startTrial = 0;
@@ -115,13 +116,16 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           String completedDate = completedData['date'];
           String timeToday =
               Jiffy(DateTime.parse(completedDate)).fromNow(); // a year ago
+          supportStatus['level1'] = true;
         }
+        bool status = completedSurvey.length > 0;
+
         dummyActions.add(
           TrialAction(
               id: SurveyElement['attributes']['id'],
               when: timeToday,
               content: SurveyElement['attributes']['name'],
-              isDone: completedSurvey.length > 0),
+              isDone: status),
         );
       }
     });
@@ -210,46 +214,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   var avilableTrials = [];
 
   var dummyOffers = [
-    Offer(
-        title: "30% cashback",
-        store: "Amazon",
-        period: "May 1 - May 28",
-        image: "assets/images/amazon.png"),
-    Offer(
-        title: "10% off - Fitbit Sense",
-        store: "Fitbit",
-        period: "May 1 - May 28",
-        image: "assets/images/fitbit.png"),
-    Offer(
-        title: "40% off (6 months)",
-        store: "Calm",
-        period: "May 1 - May 28",
-        image: "assets/images/calm.png"),
-    Offer(
-        title: "10% off monthly",
-        store: "Spotify",
-        period: "May 1 - May 28",
-        image: "assets/images/spotify.png"),
-    Offer(
-        title: "30% cashback",
-        store: "Amazon",
-        period: "May 1 - May 28",
-        image: "assets/images/amazon.png"),
-    Offer(
-        title: "10% off - Fitbit Sense",
-        store: "Fitbit",
-        period: "May 1 - May 28",
-        image: "assets/images/fitbit.png"),
-    Offer(
-        title: "40% off (6 months)",
-        store: "Calm",
-        period: "May 1 - May 28",
-        image: "assets/images/calm.png"),
-    Offer(
-        title: "10% off monthly",
-        store: "Spotify",
-        period: "May 1 - May 28",
-        image: "assets/images/spotify.png"),
     Offer(
         title: "30% cashback",
         store: "Amazon",
@@ -667,82 +631,45 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
             child: Stack(children: [
               Positioned(
-                bottom: 54,
-                left: 160,
+                bottom: 85,
+                left: 170,
                 child: Container(
                   height: 100,
                   width: 100,
                   //padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(128),
-                    color: Colors.white,
                   ),
-                  child: CircularPercentIndicator(
-                    radius: 50.0,
-                    lineWidth: 8.0,
-                    percent: 1,
-                    center: Container(
-                      width: 40,
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              "assets/images/ribbon_big.png",
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(bottom: 16),
-                              child: Text(
-                                "2",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 22),
-                              ),
-                            )
-                          ],
+                  child: supportStatus["level1"] == true
+                      ? Image.asset(
+                          "assets/images/support/level1completed.png",
+                        )
+                      : Image.asset(
+                          "assets/images/support/level1Incomplete.png",
                         ),
-                      ),
-                    ),
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: Color(0xFFf06129),
-                    backgroundColor: Color(0xFFa6c5ce),
-                  ),
                 ),
               ),
               Positioned(
-                bottom: 220,
+                bottom: 260,
                 left: 52,
                 child: Container(
-                  height: 100,
-                  width: 100,
-                  //padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(128),
-                    color: Color(0xFFe7dcdc),
-                  ),
-                  /* child: Image.asset(
+                    height: 100,
+                    width: 100,
+                    //padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(128),
+                    ),
+                    /* child: Image.asset(
                       "assets/images/gift_big.png",
                     ), */
-                  child: CircularPercentIndicator(
-                    radius: 50.0,
-                    lineWidth: 8.0,
-                    percent: 0.85,
-                    center: Container(
-                      width: 50,
-                      child: Image.asset(
-                        "assets/images/gift_big.png",
-                        color: Colors.grey.withOpacity(0.5),
-                        colorBlendMode: BlendMode.dstOut,
-                      ),
-                    ),
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: Color(0xFFf06129),
-                    backgroundColor: Color(0xFFa6c5ce),
-                  ),
-                ),
+                    child: Image.asset(
+                      "assets/images/support/level2Incomplete.png",
+                      colorBlendMode: BlendMode.dstOut,
+                    )),
               ),
               Positioned(
-                bottom: 332,
-                right: 24,
+                bottom: 382,
+                right: 30,
                 child: Container(
                   height: 100,
                   width: 100,
@@ -770,8 +697,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
               ),
               Positioned(
-                top: 105,
-                right: 80,
+                top: 145,
+                right: 85,
                 child: Container(
                   height: 100,
                   width: 100,
@@ -1220,7 +1147,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       child: Container(
                         width: size.width,
                         height: 360,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                         ),
                         child: Column(
@@ -1233,7 +1160,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 child: Container(
                                   height: 70,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -1246,13 +1174,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             "Total build credits",
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w700),
                                           ),
-                                          Text(
+                                          const Text(
                                             "\$ 135",
                                             style: TextStyle(
                                                 color: Color(0xFFF06129),
@@ -1262,17 +1190,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                         ],
                                       ),
                                       Container(
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             left: 12,
                                             right: 12,
                                             top: 10,
                                             bottom: 10),
                                         decoration: BoxDecoration(
-                                          color: Color(0xFFF06129),
+                                          color: const Color(0xFFF06129),
                                           borderRadius:
                                               BorderRadius.circular(4),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Cash out",
                                           style: TextStyle(
                                               color: Colors.white,
@@ -1287,7 +1215,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 24, bottom: 24),
-                              child: Text(
+                              child: const Text(
                                 "Mental health by CVD patients",
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w700),
@@ -1300,7 +1228,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               circularStrokeCap: CircularStrokeCap.round,
                               progressColor: Color(0xFFf06129),
                               backgroundColor: Color(0xFF7CD1E3),
-                              center: Container(
+                              center: SizedBox(
                                 width: 110,
                                 child: Container(
                                   height: 140,
@@ -1315,13 +1243,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Total credits",
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700),
                                         ),
-                                        Text(
+                                        const Text(
                                           "\$45",
                                           style: TextStyle(
                                               color: Color(0xFFF06129),
@@ -1342,7 +1270,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       bottom: 0,
                       child: Stack(
                         children: [
-                          Container(
+                          SizedBox(
                             width: size.width,
                             height: 400,
                             child: Container(
@@ -1366,7 +1294,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                 crossAxisSpacing: 30,
                                 mainAxisSpacing: 12,
                                 itemCount: dummyOffers.length,
-                                padding: EdgeInsets.only(bottom: 40),
+                                padding: const EdgeInsets.only(bottom: 40),
                                 itemBuilder: (context, index) {
                                   return Container(
                                     decoration: BoxDecoration(
@@ -1384,7 +1312,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Container(
-                                                margin: EdgeInsets.only(
+                                                margin: const EdgeInsets.only(
                                                     top: 24, bottom: 24),
                                                 child: Image.asset(
                                                     dummyOffers[index].image)),
@@ -1395,12 +1323,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                             margin: EdgeInsets.only(bottom: 12),
                                             child: Text(
                                                 dummyOffers[index].title,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontSize: 14,
                                                     fontWeight:
                                                         FontWeight.bold))),
                                         Container(
-                                          padding: EdgeInsets.only(
+                                          padding: const EdgeInsets.only(
                                               left: 12, right: 12, bottom: 16),
                                           child: Row(
                                             mainAxisAlignment:
@@ -1408,7 +1336,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                             children: [
                                               Text(
                                                 dummyOffers[index].store,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Color(0xFF7CD1E3),
                                                     fontSize: 14,
                                                     fontWeight:
@@ -1416,7 +1344,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                               ),
                                               Text(
                                                 dummyOffers[index].period,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Color(0xFFA0A1A8),
                                                     fontSize: 10,
                                                     fontWeight:
@@ -1434,12 +1362,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           ),
                           Positioned(
                             top: 24,
-                            child: Container(
+                            child: SizedBox(
                               width: size.width,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Extra credits",
                                     style: TextStyle(
                                         color: Color(0xFF08323A),
@@ -1478,8 +1406,8 @@ class ActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(14),
-      margin: EdgeInsets.only(right: 12, bottom: 2),
+      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(right: 12, bottom: 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.white, width: 1),
@@ -1492,22 +1420,22 @@ class ActionTile extends StatelessWidget {
               children: [
                 Text(
                   action.when.toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w700),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 Text(
                   action.content,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 Container(
@@ -1516,10 +1444,10 @@ class ActionTile extends StatelessWidget {
                       child: Row(
                     children: [
                       Image.asset("assets/images/done.png"),
-                      SizedBox(
+                      const SizedBox(
                         width: 4,
                       ),
-                      Text(
+                      const Text(
                         "Completed",
                         style: TextStyle(
                             color: Colors.white,
@@ -1534,24 +1462,24 @@ class ActionTile extends StatelessWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "TODAY",
                   style: TextStyle(
                       color: Color(0xFFF06129),
                       fontSize: 16,
                       fontWeight: FontWeight.w700),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 Text(
                   action.content,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xFF08323A),
                       fontSize: 13,
                       fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 GestureDetector(
@@ -1567,7 +1495,7 @@ class ActionTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                       color: Color(0xFFF06129),
                     ),
-                    child: Center(
+                    child: const Center(
                         child: Text("Start",
                             style: TextStyle(
                                 color: Colors.white,
