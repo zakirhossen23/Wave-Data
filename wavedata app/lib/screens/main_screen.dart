@@ -549,8 +549,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                                               FeelingScreen(),
                                                         ),
                                                       );
-                                                      GetOngoingData();
-                                                      GetAvialbleData();
                                                       GetAccountData();
                                                     },
                                                   )),
