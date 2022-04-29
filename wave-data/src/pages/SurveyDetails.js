@@ -652,9 +652,9 @@ function SurveyDetails() {
       await Duplicate
    }
 
-   useEffect(() => {
+   useEffect(async() => {
       LoadDataTrial();
-      LoadDataCategories()
+     await LoadDataCategories()
       LoadSurveyData()
       LoadDataSections();
       LoadDataQuestions()
@@ -993,8 +993,8 @@ function SurveyDetails() {
                                  options={dataCategory}
                                  isSearchable={true}
                                  defaultValue={e=>{
-                                    console.log(dataCategory)
-                                    return dataCategory[0];
+                                    console.log("category",dataCategory)
+                                    return dataCategory.filter(element => element['value']==sectionsdata[index].category)[0];
                                  }
                                     }
                                  getOptionLabel={e => (
