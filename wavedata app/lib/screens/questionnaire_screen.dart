@@ -26,12 +26,15 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
   };
 
   var allSections = [];
-  var allCategory = [];
+  var allCategory = [
+    {"name": "", "image": ""}
+  ];
   bool isloading = true;
   Future<void> GetData() async {
     final prefs = await SharedPreferences.getInstance();
     String surveyid = prefs.getString("surveyid").toString();
     allSections = [];
+    allCategory = [];
     var url = Uri.parse(
         'https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/GetSectionsQuestionsBySurveyID?surveyIDTXT=${surveyid}');
     final response = await http.get(url, headers: TGheader);
@@ -46,23 +49,23 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
     setState(() {
       for (var i = 0; i < allCT.length; i++) {
         var element = allCT[i];
-        var object = {
+
+        allCategory.add({
           "name": element['attributes']['name'],
           "image": element['attributes']['image'],
-        };
-        allCategory.add(object);
+        });
       }
       for (var i = 0; i < allSect.length; i++) {
         var sectElement = allSect[i]['attributes'];
+        var categoryimage = allCategory.firstWhere(
+            (element) => element['name'] == sectElement['category']);
         var object = {
           "trialid": SurveyData[0]['attributes']['Tiralid'],
-          "surveyid": SurveyData[0]['attributes']['id'],
+          "surveyid": SurveyData[0]['v_id'],
           "sectionid": sectElement['id'],
           "category": sectElement['category'],
           "description": sectElement['description'],
-          "image": allCategory
-              .where((element) => element['name'] == sectElement['category'])
-              .first['image'],
+          "image": categoryimage['image'],
           "questions": []
         };
         var allQuestions = allQC.where((element) =>
@@ -86,24 +89,25 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
     });
   }
 
-  Future<void> SaveData() async {
+  Future<void> SaveData(sectionindex) async {
+    setState(() {
+      isloading = true;
+    });
     final prefs = await SharedPreferences.getInstance();
     String surveyid = prefs.getString("surveyid").toString();
     int userid = int.parse(prefs.getString("userid").toString());
-
-    for (var i = 0; i < allSections.length; i++) {
-      var item = allSections[i];
-      int trialid = item['trialid'];
-      var surveyid = item['surveyid'];
-      var sectionid = item['sectionid'];
-      for (var itemQ in item['questions']) {
-        String questionid = itemQ.questionid;
-        String answerTXT = itemQ.Answer;
-        var url = Uri.parse(
-            'https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateSurveyAnswers?trialidTXT=${(trialid)}&surveyidTXT=${surveyid}&sectionidTXT=${sectionid}&questionidTXT=${questionid}&answerTXT=${answerTXT}&useridTXT=${userid}');
-        final response = await http.get(url, headers: TGheader);
-        var responseData = json.decode(response.body);
-      }
+    var item = allSections
+        .where((element) => element['sectionid'] == sectionindex)
+        .toList()[0];
+    int trialid = item['trialid'];
+    var sectionid = item['sectionid'];
+    for (var itemQ in item['questions']) {
+      String questionid = itemQ.questionid;
+      String answerTXT = itemQ.Answer;
+      var url = Uri.parse(
+          'https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/CreateSurveyAnswers?trialidTXT=${(trialid)}&surveyidTXT=${surveyid}&sectionidTXT=${sectionid}&questionidTXT=${questionid}&answerTXT=${answerTXT}&useridTXT=${userid}');
+      final response = await http.get(url, headers: TGheader);
+      var responseData = json.decode(response.body);
     }
     setState(() {
       isloading = false;
@@ -146,119 +150,102 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
         return Column(
           children: [
             Container(
-              child: isloading == true
-                  ? Container(
-                      height: size.height,
-                      width: size.width,
-                      child: Center(
-                          child: Container(
-                              height: 150,
-                              width: 150,
-                              child: SizedBox(
-                                child: CircularProgressIndicator(
-                                  color: Color(0xFFF06129),
-                                ),
-                                height: 150.0,
-                                width: 150.0,
-                              ))),
-                    )
-                  : Column(
-                      children: [
-                        Container(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    e['category'],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color(0xFF423838),
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 0, left: 10),
-                                  child: Container(
-                                      height: 80,
-                                      width: 80,
-                                      child: Image.network(e['image'])),
-                                ),
-                              ]),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 48, right: 48),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    e['description'],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color(0xFF423838),
-                                        fontSize: 14,
-                                        letterSpacing: 0.82,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ]),
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Stack(
-                          alignment: Alignment.bottomCenter,
-                          children: [
-                            Container(
-                              width: size.width,
-                              height: size.height - size.height / 5,
-                              child: ListView.builder(
-                                padding: EdgeInsets.only(bottom: 80),
-                                itemCount: e['questions'].length,
-                                itemBuilder: ((context, index) =>
-                                    QuestionWidget(
-                                      question: e['questions'][index],
-                                    )),
-                              ),
+              child: Column(
+                children: [
+                  Container(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Text(
+                              e['category'],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color(0xFF423838),
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: 0, left: 24, right: 24, bottom: 24),
-                              child: GestureDetector(
-                                onTap: () async {
-                                  setState(() {
-                                    isloading = true;
-                                  });
-                                  await SaveData();
-                                  questionnaireViewmodel.updateIndex(
-                                      questionnaireViewmodel.selectedIndex + 1);
-                                },
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(8),
-                                  elevation: 2,
-                                  child: Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Color(0xFFF06129),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Next",
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 0, left: 10),
+                            child: Container(
+                                height: 60,
+                                width: 60,
+                                child: Image.network(e['image'])),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              e['description'],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color(0xFF423838),
+                                  fontSize: 14,
+                                  letterSpacing: 0.82,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ]),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Container(
+                        width: size.width,
+                        height: size.height - size.height / 5,
+                        child: ListView.builder(
+                          padding: EdgeInsets.only(bottom: 80),
+                          itemCount: e['questions'].length,
+                          itemBuilder: ((context, index) => QuestionWidget(
+                                question: e['questions'][index],
+                              )),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            top: 0, left: 24, right: 24, bottom: 24),
+                        child: GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              isloading = true;
+                            });
+                            await SaveData(e['sectionid']);
+                            questionnaireViewmodel.updateIndex(
+                                questionnaireViewmodel.selectedIndex + 1);
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(8),
+                            elevation: 2,
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Color(0xFFF06129),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Next",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.white),
                                 ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             )
           ],
         );
@@ -313,35 +300,34 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            isloading == false
-                ? SizedBox(
-                    height: 40,
+          children: isloading == true
+              ? [
+                  Container(
+                    height: size.height,
+                    width: size.width,
+                    child: Center(
+                        child: Container(
+                            height: 150,
+                            width: 150,
+                            child: const SizedBox(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFFF06129),
+                              ),
+                              height: 150.0,
+                              width: 150.0,
+                            ))),
                   )
-                : Text(""),
-            IndexedStack(
-              index: questionnaireViewmodel.selectedIndex,
-              children: isloading == false
-                  ? renderSections()
-                  : [
-                      Container(
-                        height: size.height,
-                        width: size.width,
-                        child: Center(
-                            child: Container(
-                                height: 150,
-                                width: 150,
-                                child: SizedBox(
-                                  child: CircularProgressIndicator(
-                                    color: Color(0xFFF06129),
-                                  ),
-                                  height: 150.0,
-                                  width: 150.0,
-                                ))),
-                      )
-                    ],
-            )
-          ],
+                ]
+              : [
+                  isloading == false
+                      ? SizedBox(
+                          height: 40,
+                        )
+                      : Text(""),
+                  IndexedStack(
+                      index: questionnaireViewmodel.selectedIndex,
+                      children: renderSections())
+                ],
         ),
       ),
     );
