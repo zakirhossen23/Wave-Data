@@ -26,6 +26,7 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
   };
 
   var allSections = [];
+  var allCategory = [];
   bool isloading = true;
   Future<void> GetData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -41,7 +42,16 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
     var allSect = data[1]['SCV'];
 
     var allQC = data[2]['SQ'];
+    var allCT = data[3]['CT'];
     setState(() {
+      for (var i = 0; i < allCT.length; i++) {
+        var element = allCT[i];
+        var object = {
+          "name": element['attributes']['name'],
+          "image": element['attributes']['image'],
+        };
+        allCategory.add(object);
+      }
       for (var i = 0; i < allSect.length; i++) {
         var sectElement = allSect[i]['attributes'];
         var object = {
@@ -49,6 +59,10 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
           "surveyid": SurveyData[0]['attributes']['id'],
           "sectionid": sectElement['id'],
           "category": sectElement['category'],
+          "description": sectElement['description'],
+          "image": allCategory
+              .where((element) => element['name'] == sectElement['category'])
+              .first['image'],
           "questions": []
         };
         var allQuestions = allQC.where((element) =>
@@ -151,23 +165,45 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                   : Column(
                       children: [
                         Container(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    e['category'],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xFF423838),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 0, left: 10),
+                                  child: Container(
+                                      height: 80,
+                                      width: 80,
+                                      child: Image.network(e['image'])),
+                                ),
+                              ]),
+                        ),
+                        Container(
                           margin: EdgeInsets.only(left: 48, right: 48),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(bottom: 16),
-                                child: Text(
-                                  e['category'],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Color(0xFF423838),
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    e['description'],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xFF423838),
+                                        fontSize: 14,
+                                        letterSpacing: 0.82,
+                                        fontWeight: FontWeight.w400),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ]),
                         ),
                         SizedBox(
                           height: 12,
@@ -280,7 +316,7 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
           children: [
             isloading == false
                 ? SizedBox(
-                    height: size.height / 8,
+                    height: 40,
                   )
                 : Text(""),
             IndexedStack(
@@ -463,7 +499,99 @@ class _QuestionWidget extends State<QuestionWidget> {
           ],
         ),
       );
+    } else if (question.QuestionType == "rating" &&
+        question.QuestionType2 == "1-3") {
+      return Container(
+        width: size.width,
+        margin: EdgeInsets.only(left: 16, right: 16, bottom: 32),
+        padding: EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Color(
+            0xFFFEE4CA,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 24, bottom: 24),
+              padding: EdgeInsets.only(left: 48, right: 48),
+              child: Text(
+                question.id + ". " + question.content,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Color(0xFF423838),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          question.Answer = "3";
+                        });
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(left: 24, right: 24),
+                          child: question.Answer != "3"
+                              ? Image.asset(
+                                  "assets/images/moods/5.png",
+                                )
+                              : Image.asset(
+                                  "assets/images/moodspressed/5.png",
+                                )),
+                    ),
+                    Text("Excellent")
+                  ],
+                ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          question.Answer = "2";
+                        });
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(left: 24, right: 24),
+                          child: question.Answer != "2"
+                              ? Image.asset("assets/images/moods/3.png")
+                              : Image.asset(
+                                  "assets/images/moodspressed/3.png")),
+                    ),
+                    Text("Good")
+                  ],
+                ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          question.Answer = "1";
+                        });
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(left: 24, right: 24),
+                          child: question.Answer != "1"
+                              ? Image.asset("assets/images/moods/1.png")
+                              : Image.asset(
+                                  "assets/images/moodspressed/1.png")),
+                    ),
+                    Text("Poor")
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
+      );
     }
+
     return Container(
       width: size.width,
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 32),
@@ -496,20 +624,17 @@ class _QuestionWidget extends State<QuestionWidget> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        question.Answer = "3";
+                        question.Answer = "Yes";
                       });
                     },
                     child: Container(
                         margin: EdgeInsets.only(left: 24, right: 24),
-                        child: question.Answer != "3"
-                            ? Image.asset(
-                                "assets/images/moods/5.png",
-                              )
+                        child: question.Answer != "Yes"
+                            ? Image.asset("assets/images/moods/back-yes.png")
                             : Image.asset(
-                                "assets/images/moodspressed/5.png",
-                              )),
+                                "assets/images/moodspressed/back-yes.png")),
                   ),
-                  Text("Excellent")
+                  Text("Yes")
                 ],
               ),
               Row(
@@ -517,33 +642,17 @@ class _QuestionWidget extends State<QuestionWidget> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        question.Answer = "2";
+                        question.Answer = "No";
                       });
                     },
                     child: Container(
                         margin: EdgeInsets.only(left: 24, right: 24),
-                        child: question.Answer != "2"
-                            ? Image.asset("assets/images/moods/3.png")
-                            : Image.asset("assets/images/moodspressed/3.png")),
+                        child: question.Answer != "No"
+                            ? Image.asset("assets/images/moods/back-no.png")
+                            : Image.asset(
+                                "assets/images/moodspressed/back-no.png")),
                   ),
-                  Text("Good")
-                ],
-              ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        question.Answer = "1";
-                      });
-                    },
-                    child: Container(
-                        margin: EdgeInsets.only(left: 24, right: 24),
-                        child: question.Answer != "1"
-                            ? Image.asset("assets/images/moods/1.png")
-                            : Image.asset("assets/images/moodspressed/1.png")),
-                  ),
-                  Text("Poor")
+                  Text("No")
                 ],
               )
             ],
