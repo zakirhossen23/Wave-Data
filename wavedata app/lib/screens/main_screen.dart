@@ -138,7 +138,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               id: SurveyElement['attributes']['id'],
               when: timeToday,
               content: SurveyElement['attributes']['name'],
-              isDone: false),
+              isDone: status),
         );
       }
       userDetails['ongoingcredit'] = totalcredit;
