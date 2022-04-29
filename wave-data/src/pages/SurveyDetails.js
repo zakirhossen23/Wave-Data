@@ -684,6 +684,7 @@ function SurveyDetails() {
       var inputbox = e.target;
       let questionid = inputbox.getAttribute("questionid")
       let questionTXT = inputbox.value;
+      sectionsQuestionsdata.filter(e2 => { return e2.id == questionid })[0].question = questionTXT; 
       const textUpdate = `UpdateQuestion?idTXT=${encodeURIComponent(questionid)}&typeTXT=""&questionTXT=${encodeURIComponent(questionTXT)}&way=question`
       fetch(`https://cors-anyhere.herokuapp.com/https://wavedata.i.tgcloud.io:14240/restpp/query/WaveData/${textUpdate}`, {
          "headers": {
@@ -1027,7 +1028,9 @@ function SurveyDetails() {
                                        <DocumentDuplicateIcon className="w-5 h-5 text-gray-400" />
                                     </button>
                                  </div>
-                                 <input type="text" onKeyDown={(e) => { sectionsQuestionsdata.filter(e2 => { return e2.id == itemQuestions.id })[0].question = e.target.value; startTyping(e) }} defaultValue={itemQuestions.question} questionid={itemQuestions.id} className="border py-1 px-2 w-full" placeholder="What is your question?" />
+                                 <input type="text" onKeyDown={(e) => {
+                                      startTyping(e);
+                                      }} defaultValue={itemQuestions.question} questionid={itemQuestions.id} className="border py-1 px-2 w-full" placeholder="What is your question?" />
 
                                  <div className="flex flex-wrap mt-2">
                                     <select name={`questiontype${index}`} defaultValue={itemQuestions.questiontype} onChange={(e) => { sectionsQuestionsdata.filter(e2 => { return e2.id == itemQuestions.id })[0].questiontype = e.target.value; QustionsWithType(itemQuestions.id, itemQuestions, e.target.value) }} sectionid={sectindex} questionid={itemQuestions.id} id={`questiontype${index}`} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ width: "49%", "fontFamily": "FontAwesome" }}>
