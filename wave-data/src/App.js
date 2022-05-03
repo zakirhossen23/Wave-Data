@@ -24,9 +24,10 @@ import FAQ from './pages/faq'
 import About from './pages/about'
 import Contact from './pages/contact'
 import Cookies from 'js-cookie'
-
+import cors from 'cors'
 
 export default function App() {
+  
   return (
     <BrowserRouter>
       <Routes>

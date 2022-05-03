@@ -149,6 +149,7 @@ function SurveyDetails() {
          "body": null,
          "method": "GET"
       }).then(e => { return e.json() }).then(e2 => {
+         
          setsectionsQuestionsdata(prevState => [...prevState, {
             id: e2.results[0].ID,
             sectionid: sectionsidTXT,
@@ -165,6 +166,8 @@ function SurveyDetails() {
 
          addQuestionBTN.disabled = false;
          setstatus("saved!")
+      }).catch(err=>{
+         console.error(err)
       })
 
 
@@ -664,7 +667,8 @@ function SurveyDetails() {
    }, [])
    //setup before functions
    var typingTimer;                //timer identifier
-   var doneTypingInterval = 1000;  //time in ms, 1 seconds for example
+   var descriptiontypingTimer;                //timer identifier
+   var doneTypingInterval = 100;  //time in ms, 1 seconds for example
 
    function startTyping(e) {
       clearTimeout(typingTimer);
@@ -672,8 +676,8 @@ function SurveyDetails() {
    }
 
    function startTypingDescription(e) {
-      clearTimeout(typingTimer);
-      typingTimer = setTimeout(() => doneTypingDescription(e), doneTypingInterval);
+      clearTimeout(descriptiontypingTimer);
+      descriptiontypingTimer = setTimeout(() => doneTypingDescription(e), doneTypingInterval);
    }
 
 
@@ -1012,7 +1016,7 @@ function SurveyDetails() {
                            </div>
                            <div >
 
-                              <textarea className="border py-1 px-2 w-full" name="categoryName" onKeyDown={(e) => { sectionsdata[index].description = e.target.value; startTypingDescription(e) }}  sectionid={item.id} defaultValue={item.description} placeholder="Description" />
+                              <textarea className="border py-1 px-2 w-full" name="categoryName" onKeyUp={(e) => { sectionsdata[index].description = e.target.value; startTypingDescription(e) }} onChange={(e) => { sectionsdata[index].description = e.target.value; startTypingDescription(e) }}  sectionid={item.id} defaultValue={item.description} placeholder="Description" />
 
                            </div>
                         </div>
@@ -1028,9 +1032,11 @@ function SurveyDetails() {
                                        <DocumentDuplicateIcon className="w-5 h-5 text-gray-400" />
                                     </button>
                                  </div>
-                                 <input type="text" onKeyDown={(e) => {
+                                 <input type="text" onKeyUp={(e) => {
                                       startTyping(e);
-                                      }} defaultValue={itemQuestions.question} questionid={itemQuestions.id} className="border py-1 px-2 w-full" placeholder="What is your question?" />
+                                      }} onChange={(e) => {
+                                       startTyping(e);
+                                       }} defaultValue={itemQuestions.question} questionid={itemQuestions.id}  className="border py-1 px-2 w-full" placeholder="What is your question?" />
 
                                  <div className="flex flex-wrap mt-2">
                                     <select name={`questiontype${index}`} defaultValue={itemQuestions.questiontype} onChange={(e) => { sectionsQuestionsdata.filter(e2 => { return e2.id == itemQuestions.id })[0].questiontype = e.target.value; QustionsWithType(itemQuestions.id, itemQuestions, e.target.value) }} sectionid={sectindex} questionid={itemQuestions.id} id={`questiontype${index}`} className="h-10 px-1 rounded-md border border-gray-200 outline-none " style={{ width: "49%", "fontFamily": "FontAwesome" }}>
