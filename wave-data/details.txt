@@ -13,8 +13,8 @@ April14202233 -- Login
 WaveData
 wave12345
 user:wavedata
-Secret = tbhiovuba0gtb76rka3qc9239allnf0g
-Token = h6t28nnpr3e58pdm1c1miiei4kdcejuv
+Secret = gcamim96jk5k943dfshu0kth6jkf5tl9
+Token = n63cf58df61rvnp6dgeq4a4rolokeoe8
 ---------
 
 FHIR:
